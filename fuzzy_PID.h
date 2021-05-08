@@ -11,58 +11,59 @@ class FuzzyPID
 public:
 	const static int N=7;
 private:
-	float target;  //ÏµÍ³µÄ¿ØÖÆÄ¿±ê
-	float actual;  //²ÉÑù»ñµÃµÄÊµ¼ÊÖµ
-	float e;       //Îó²î
-	float e_pre_1; //ÉÏÒ»´ÎµÄÎó²î
-	float e_pre_2; //ÉÏÉÏ´ÎµÄÎó²î
-	float de;      //Îó²îµÄ±ä»¯ÂÊ
-	float emax;    //Îó²î»ù±¾ÂÛÓòÉÏÏŞ
-	float demax;   //Îó²î±ç»¯ÂÊ»ù±¾ÂÛÓòµÄÉÏÏŞ
-	float delta_Kp_max;   //delta_kpÊä³öµÄÉÏÏŞ
-	float delta_Ki_max;   //delta_kiÊä³öÉÏÏŞ
-	float delta_Kd_max;   //delta_kdÊä³öÉÏÏŞ
-	float Ke;      //Ke=n/emax,Á¿»¯ÂÛÓòÎª[-3,-2,-1,0,1,2,3]
-	float Kde;     //Kde=n/demax,Á¿»¯ÂÛÓòÎª[-3,-2,-1,0,1,2,3]
-	float Ku_p;    //Ku_p=Kpmax/n,Á¿»¯ÂÛÓòÎª[-3,-2,-1,0,1,2,3]
-	float Ku_i;    //Ku_i=Kimax/n,Á¿»¯ÂÛÓòÎª[-3,-2,-1,0,1,2,3]
-	float Ku_d;    //Ku_d=Kdmax/n,Á¿»¯ÂÛÓòÎª[-3,-2,-1,0,1,2,3]
-	int Kp_rule_matrix[N][N];//KpÄ£ºı¹æÔò¾ØÕó
-	int Ki_rule_matrix[N][N];//KiÄ£ºı¹æÔò¾ØÕó
-	int Kd_rule_matrix[N][N];//KdÄ£ºı¹æÔò¾ØÕó
-	string mf_t_e;       //eµÄÁ¥Êô¶Èº¯ÊıÀàĞÍ
-	string mf_t_de;      //deµÄÁ¥Êô¶Èº¯ÊıÀàĞÍ
-	string mf_t_Kp;      //kpµÄÁ¥Êô¶Èº¯ÊıÀàĞÍ
-	string mf_t_Ki;      //kiµÄÁ¥Êô¶Èº¯ÊıÀàĞÍ
-	string mf_t_Kd;      //kdµÄÁ¥Êô¶Èº¯ÊıÀàĞÍ
-	float *e_mf_paras; //Îó²îµÄÁ¥Êô¶Èº¯ÊıµÄ²ÎÊı
-	float *de_mf_paras;//Îó²îµÄÆ«²îÁ¥Êô¶Èº¯ÊıµÄ²ÎÊı
-	float *Kp_mf_paras; //kpµÄÁ¥Êô¶Èº¯ÊıµÄ²ÎÊı
-	float *Ki_mf_paras; //kiµÄÁ¥Êô¶Èº¯ÊıµÄ²ÎÊı
-	float *Kd_mf_paras; //kdµÄÁ¥Êô¶Èº¯ÊıµÄ²ÎÊı
+	float target;  //ç³»ç»Ÿçš„æ§åˆ¶ç›®æ ‡
+	float actual;  //é‡‡æ ·è·å¾—çš„å®é™…å€¼
+	float e;       //è¯¯å·®
+	float laste;
+	float e_pre_1; //ä¸Šä¸€æ¬¡çš„è¯¯å·®
+	float e_pre_2; //ä¸Šä¸Šæ¬¡çš„è¯¯å·®
+	float de;      //è¯¯å·®çš„å˜åŒ–ç‡
+	float emax;    //è¯¯å·®åŸºæœ¬è®ºåŸŸä¸Šé™
+	float demax;   //è¯¯å·®è¾©åŒ–ç‡åŸºæœ¬è®ºåŸŸçš„ä¸Šé™
+	float delta_Kp_max;   //delta_kpè¾“å‡ºçš„ä¸Šé™
+	float delta_Ki_max;   //delta_kiè¾“å‡ºä¸Šé™
+	float delta_Kd_max;   //delta_kdè¾“å‡ºä¸Šé™
+	float Ke;      //Ke=n/emax,é‡åŒ–è®ºåŸŸä¸º[-3,-2,-1,0,1,2,3]
+	float Kde;     //Kde=n/demax,é‡åŒ–è®ºåŸŸä¸º[-3,-2,-1,0,1,2,3]
+	float Ku_p;    //Ku_p=Kpmax/n,é‡åŒ–è®ºåŸŸä¸º[-3,-2,-1,0,1,2,3]
+	float Ku_i;    //Ku_i=Kimax/n,é‡åŒ–è®ºåŸŸä¸º[-3,-2,-1,0,1,2,3]
+	float Ku_d;    //Ku_d=Kdmax/n,é‡åŒ–è®ºåŸŸä¸º[-3,-2,-1,0,1,2,3]
+	int Kp_rule_matrix[N][N];//Kpæ¨¡ç³Šè§„åˆ™çŸ©é˜µ
+	int Ki_rule_matrix[N][N];//Kiæ¨¡ç³Šè§„åˆ™çŸ©é˜µ
+	int Kd_rule_matrix[N][N];//Kdæ¨¡ç³Šè§„åˆ™çŸ©é˜µ
+	string mf_t_e;       //eçš„éš¶å±åº¦å‡½æ•°ç±»å‹
+	string mf_t_de;      //deçš„éš¶å±åº¦å‡½æ•°ç±»å‹
+	string mf_t_Kp;      //kpçš„éš¶å±åº¦å‡½æ•°ç±»å‹
+	string mf_t_Ki;      //kiçš„éš¶å±åº¦å‡½æ•°ç±»å‹
+	string mf_t_Kd;      //kdçš„éš¶å±åº¦å‡½æ•°ç±»å‹
+	float *e_mf_paras; //è¯¯å·®çš„éš¶å±åº¦å‡½æ•°çš„å‚æ•°
+	float *de_mf_paras;//è¯¯å·®çš„åå·®éš¶å±åº¦å‡½æ•°çš„å‚æ•°
+	float *Kp_mf_paras; //kpçš„éš¶å±åº¦å‡½æ•°çš„å‚æ•°
+	float *Ki_mf_paras; //kiçš„éš¶å±åº¦å‡½æ•°çš„å‚æ•°
+	float *Kd_mf_paras; //kdçš„éš¶å±åº¦å‡½æ•°çš„å‚æ•°
 	float Kp;
 	float Ki;
 	float Kd;
 	float A;
 	float B;
 	float C;
-	void showMf(const string & type,float *mf_paras);      //ÏÔÊ¾Á¥Êô¶Èº¯ÊıµÄĞÅÏ¢
-	void setMf_sub(const string & type,float *paras,int n);//ÉèÖÃÄ£ºıÁ¥Êô¶Èº¯ÊıµÄ×Óº¯Êı
+	void showMf(const string & type,float *mf_paras);      //æ˜¾ç¤ºéš¶å±åº¦å‡½æ•°çš„ä¿¡æ¯
+	void setMf_sub(const string & type,float *paras,int n);//è®¾ç½®æ¨¡ç³Šéš¶å±åº¦å‡½æ•°çš„å­å‡½æ•°
 public:
 	FuzzyPID(float e_max,float de_max,float kp_max,float ki_max,float kd_max,float Kp0,float Ki0,float Kd0);
 	FuzzyPID(float *fuzzyLimit,float *pidInitVal);
 	~FuzzyPID();
-	float trimf(float x,float a,float b,float c);          //Èı½ÇÁ¥Êô¶Èº¯Êı
-	float gaussmf(float x,float ave,float sigma);          //ÕıÌ¬Á¥Êô¶Èº¯Êı
-	float trapmf(float x,float a,float b,float c,float d); //ÌİĞÎÁ¥Êô¶Èº¯Êı
+	float trimf(float x,float a,float b,float c);          //ä¸‰è§’éš¶å±åº¦å‡½æ•°
+	float gaussmf(float x,float ave,float sigma);          //æ­£æ€éš¶å±åº¦å‡½æ•°
+	float trapmf(float x,float a,float b,float c,float d); //æ¢¯å½¢éš¶å±åº¦å‡½æ•°
 	void setMf(const string & mf_type_e,float *e_mf,
 			   const string & mf_type_de,float *de_mf,
 			   const string & mf_type_Kp,float *Kp_mf,
 		       const string & mf_type_Ki,float *Ki_mf,
-			   const string & mf_type_Kd,float *Kd_mf);	//ÉèÖÃÄ£ºıÁ¥Êô¶Èº¯ÊıµÄ²ÎÊı
-	void setRuleMatrix(int kp_m[N][N],int ki_m[N][N],int kd_m[N][N]);  //ÉèÖÃÄ£ºı¹æÔò
-	float realize(float t,float a);              //ÊµÏÖÄ£ºı¿ØÖÆ
-	void showInfo();                                      //ÏÔÊ¾¸ÃÄ£ºı¿ØÖÆÆ÷µÄĞÅÏ¢
+			   const string & mf_type_Kd,float *Kd_mf);	//è®¾ç½®æ¨¡ç³Šéš¶å±åº¦å‡½æ•°çš„å‚æ•°
+	void setRuleMatrix(int kp_m[N][N],int ki_m[N][N],int kd_m[N][N]);  //è®¾ç½®æ¨¡ç³Šè§„åˆ™
+	float realize(float t,float a);              //å®ç°æ¨¡ç³Šæ§åˆ¶
+	void showInfo();                                      //æ˜¾ç¤ºè¯¥æ¨¡ç³Šæ§åˆ¶å™¨çš„ä¿¡æ¯
 
 
 };
